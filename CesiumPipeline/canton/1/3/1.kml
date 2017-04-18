@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<kml xmlns="http://earth.google.com/kml/2.1">
+	  <Document>
+	    <Name>1/3/1.kml</Name>
+	    <Description></Description>
+	    <Style>
+	      <ListStyle id="hideChildren">
+	        <listItemType>checkHideChildren</listItemType>
+	      </ListStyle>
+	    </Style>
+	    <Region>
+	      <Lod>
+	        <minLodPixels>32</minLodPixels>
+	        <maxLodPixels>520</maxLodPixels>
+	      </Lod>
+	      <LatLonAltBox>
+	        <north>90.00000000000000</north>
+	        <south>0.00000000000000</south>
+	        <east>180.00000000000000</east>
+	        <west>90.00000000000000</west>
+	      </LatLonAltBox>
+	    </Region>
+	    <GroundOverlay>
+	      <drawOrder>2</drawOrder>
+	      <Icon>
+	        <href>1.terrain</href>
+	      </Icon>
+	      <LatLonBox>
+	        <north>90.00000000000000</north>
+	        <south>0.00000000000000</south>
+	        <east>180.00000000000000</east>
+	        <west>90.00000000000000</west>
+	      </LatLonBox>
+	    </GroundOverlay>
+	
+	    <NetworkLink>
+	      <name>2/6/2.terrain</name>
+	      <Region>
+	        <Lod>
+	          <minLodPixels>32</minLodPixels>
+	          <maxLodPixels>-1</maxLodPixels>
+	        </Lod>
+	        <LatLonAltBox>
+	          <north>45.00000000000000</north>
+	          <south>0.00000000000000</south>
+	          <east>135.00000000000000</east>
+	          <west>90.00000000000000</west>
+	        </LatLonAltBox>
+	      </Region>
+	      <Link>
+	        <href>../../2/6/2.kml</href>
+	        <viewRefreshMode>onRegion</viewRefreshMode>
+	        <viewFormat/>
+	      </Link>
+	    </NetworkLink>
+		  </Document>
+	</kml>
+	

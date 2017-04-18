@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<TileMap version="1.0.0" tilemapservice="http://tms.osgeo.org/1.0.0">
+	  <Title>srtm_59_08.tif</Title>
+	  <Abstract></Abstract>
+	  <SRS>EPSG:4326</SRS>
+	  <BoundingBox minx="19.99958379339660" miny="109.99958381761098" maxx="25.00041712672993" maxy="115.00041715094432"/>
+	  <Origin x="19.99958379339660" y="109.99958381761098"/>
+	  <TileFormat width="65" height="65" mime-type="image/terrain" extension="terrain"/>
+	  <TileSets profile="geodetic">
+	    <TileSet href="0" units-per-pixel="0.70312500000000" order="0"/>
+	    <TileSet href="1" units-per-pixel="0.35156250000000" order="1"/>
+	    <TileSet href="2" units-per-pixel="0.17578125000000" order="2"/>
+	    <TileSet href="3" units-per-pixel="0.08789062500000" order="3"/>
+	    <TileSet href="4" units-per-pixel="0.04394531250000" order="4"/>
+	    <TileSet href="5" units-per-pixel="0.02197265625000" order="5"/>
+	    <TileSet href="6" units-per-pixel="0.01098632812500" order="6"/>
+	    <TileSet href="7" units-per-pixel="0.00549316406250" order="7"/>
+	    <TileSet href="8" units-per-pixel="0.00274658203125" order="8"/>
+	  </TileSets>
+	</TileMap>
+	
