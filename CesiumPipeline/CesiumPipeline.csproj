@@ -354,6 +354,8 @@
     <Content Include="Cesium\Workers\transferTypedArrayTest.js" />
     <Content Include="Cesium\Workers\upsampleQuantizedTerrainMesh.js" />
     <Content Include="Lib\jquery-3.2.1.js" />
+    <Content Include="Lib\jquery.js" />
+    <Content Include="Lib\template.js" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -396,8 +398,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Default.aspx" />
+    <Content Include="Scripts\Application.js" />
     <Content Include="Scripts\Main.js" />
+    <Content Include="Scripts\UI.js" />
     <Content Include="Styles\Main.css" />
+    <Content Include="Templates\UI.txt" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
