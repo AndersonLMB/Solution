@@ -14,6 +14,7 @@
     <script src="Scripts/Application.js" defer="defer"></script>
     <script src="Scripts/UI.js" defer="defer"></script>
     <link href="Styles/Main.css" rel="stylesheet" />
+    <link href="Styles/UI.css" rel="stylesheet" />
 </head>
 <body>
     <div id="cesiumContainer"></div>

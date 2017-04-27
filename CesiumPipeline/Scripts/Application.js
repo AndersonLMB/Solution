@@ -1,6 +1,11 @@
 ﻿/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jquery-3.2.1.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Cesium/Cesium.js" />
 var terrainProvider = new Cesium.CesiumTerrainProvider({ url: "http://localhost/CesiumPipeline/canton" });
+var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
+    url: 'https://assets.agi.com/stk-terrain/world',
+    requestWaterMask: true,
+    requestVertexNormals: true
+});
 
 var viewer = new Cesium.Viewer("cesiumContainer", {
     animation: false,

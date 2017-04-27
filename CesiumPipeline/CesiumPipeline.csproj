@@ -402,7 +402,8 @@
     <Content Include="Scripts\Main.js" />
     <Content Include="Scripts\UI.js" />
     <Content Include="Styles\Main.css" />
-    <Content Include="Templates\UI.txt" />
+    <Content Include="Styles\UI.css" />
+    <Content Include="Templates\UI.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
