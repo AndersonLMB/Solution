@@ -10,6 +10,8 @@
 }
 
 .resourcesbar-container {
+    cursor: default;
+    user-select: none;
     position: absolute;
     left: 0;
     top: 30%;

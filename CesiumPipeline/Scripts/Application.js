@@ -1,5 +1,8 @@
 ﻿/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jquery-3.2.1.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Cesium/Cesium.js" />
+/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jsts.js" />
+/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/ol.js" />
+
 var terrainProvider = new Cesium.CesiumTerrainProvider({ url: "http://localhost/CesiumPipeline/canton" });
 var cesiumTerrainProviderMeshes = new Cesium.CesiumTerrainProvider({
     url: 'https://assets.agi.com/stk-terrain/world',
@@ -52,6 +55,7 @@ var loadEntities = function (entitiesFromServer) {
         });
     });
 }
+
 var entitiesFromServer = function (url) {
     var o = new Object();
     o.url = url;
