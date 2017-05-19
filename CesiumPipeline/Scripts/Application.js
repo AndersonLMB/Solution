@@ -197,3 +197,35 @@ var heigthPointOnPolyline = function (point, polyline) {
 
 }
 
+//features1, features2 : ol.Features
+var intersectFeatures = function (features1, features2) {
+    var intersection;
+    var results = [];
+    var point;
+    jQuery.each(features1, function (i, o) {
+        jQuery.each(features2, function (j, p) {
+            intersection = computeIntersect(o, p);
+            if (intersection.getType() == "Point") {
+                //TODO
+                var result = {
+                    feature1: "",
+                    feature2: "",
+                    height1: "",
+                    height2: "",
+                    coordinate: ""
+                };
+                point = intersection;
+                polyline1 = o.getGeometry();
+                polyline2 = p.getGeometry();
+                result.feature1 = o;
+                result.feature2 = p;
+                result.height1 = heigthPointOnPolyline(point, polyline1);
+                result.height2 = heigthPointOnPolyline(point, polyline2);
+                result.coordinate = intersection.getCoordinates();
+                //----
+                results.push(result);
+            }
+        });
+    });
+    console.log(results);
+}
