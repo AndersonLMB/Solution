@@ -205,7 +205,7 @@
       <Lcid>0</Lcid>
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
     <COMReference Include="esriGeoprocessing">
       <Guid>{C031A050-82C6-4F8F-8836-5692631CFFE6}</Guid>

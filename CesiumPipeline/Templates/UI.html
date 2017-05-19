@@ -30,9 +30,9 @@
         <div class="resource-container">
             <div class="resource-title">{{value.title}}</div>
             <div class="resource-content">
-                <select>
+                <select class="{{value.type}}">
                     {{each value.options as value1 j}}
-                    <option>{{value1.title}}</option>
+                    <option value="{{value1.val}}">{{value1.title}}</option>
                     {{/each}}
                 </select>
             </div>
