@@ -38,5 +38,64 @@
             </div>
         </div>
         {{/each}}
+
+        <div class="databar-title">
+            <br />
+            数据
+        </div>
+        <div class="data-container">
+            {{each data as value i}}
+            <input class="data-check-{{value.abbr}}" type="checkbox" value="{{value.abbr}}" />{{value.title}}<br />
+            {{/each}}
+        </div>
+        <div class="analysisbar-title">
+            <br />
+            分析
+            <div class="analysis">
+                <div>碰撞分析</div>
+                <select class="features1">
+                    {{each data as value i}}
+                    <option value="{{value.abbr}}">{{value.title}}</option>
+                    {{/each}}
+                </select>
+                <br />
+                <select class="features2">
+                    {{each data as value i}}
+                    <option value="{{value.abbr}}">{{value.title}}</option>
+                    {{/each}}
+                </select>
+                <br />
+                <button class="collision-apply">确认</button>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="resultsbar">
+    <div class="resultsbar-container">
+        <div> <span class="resultsbar-close">关闭</span> </div>
+        <div>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Coordinate</th>
+                    <th>要素1</th>
+                    <th>于要素1的高程</th>
+                    <th>要素2</th>
+                    <th>于要素2的高程</th>
+                </tr>
+                {{each results as value i}}
+                <tr>
+                <td>{{i}}</td>
+                <td>[{{value.coordinate[0]}},{{value.coordinate[1]}}]</td>
+                <td></td>
+                <td>{{value.height1}}</td>
+                <td></td>
+                <td>{{value.height2}}</td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+
     </div>
 </script>

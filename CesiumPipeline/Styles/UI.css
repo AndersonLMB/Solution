@@ -17,3 +17,15 @@
     top: 30%;
     background-color: white;
 }
+
+.resultsbar-container {
+    font-family: nsimsun;
+    font-size: 9px;
+    top: 10%;
+    left: 50%;
+    overflow-y: scroll;
+    min-width: 400px;
+    z-index: 200;
+    position: absolute;
+    background-color: white;
+}

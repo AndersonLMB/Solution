@@ -1,4 +1,5 @@
-﻿/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jquery-3.2.1.js" />
+﻿/// <reference path="UI.js" />
+/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jquery-3.2.1.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Cesium/Cesium.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/ol.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jsts.js" />
@@ -79,7 +80,8 @@ var entitiesFromServer = function (url) {
     o.url = url;
     var result = null;
     jQuery.ajax({
-        url: "http://localhost:6080/arcgis/rest/services/PZH/PZH4326/MapServer/1/query",
+        //url: "http://localhost:6080/arcgis/rest/services/PZH/PZH4326/MapServer/1/query",
+        url: url + "/query",
         method: "GET",
         async: false,
         data: {
@@ -135,7 +137,6 @@ var readFeatureFromURL = function (url) {
     });
     return features;
 }
-
 
 //计算交点
 //poly1: ol.Feature
@@ -228,4 +229,17 @@ var intersectFeatures = function (features1, features2) {
         });
     });
     console.log(results);
+    return results;
 }
+
+var collisionCheck = function () {
+    features1 = readFeatureFromURL(data.data[jQuery(".features1").val()].url);
+    features2 = readFeatureFromURL(data.data[jQuery(".features2").val()].url);
+    var results = intersectFeatures(features1, features2);
+    renderCollisionResults(results);
+    //console.log(results);
+    //f0 = readFeatureFromURL("http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/0");
+    //f1 = readFeatureFromURL("http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/1");
+    //intersectFeatures(f0, f1);
+}
+
