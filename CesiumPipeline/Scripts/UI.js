@@ -74,12 +74,12 @@ var data = {
             type: "Polyline",
             url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/1",
         },
-        "PSGD": {
-            title: "攀枝花排水管点",
-            abbr: "PSGD",
-            type: "Point",
-            url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/2",
-        },
+        //"PSGD": {
+        //    title: "攀枝花排水管点",
+        //    abbr: "PSGD",
+        //    type: "Point",
+        //    url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/2",
+        //},
         "RQGX": {
             title: "攀枝花燃气管线",
             abbr: "RQGX",
@@ -94,6 +94,14 @@ var data = {
         }
     ],
 };
+
+var entities = {};
+
+jQuery.each(data.data, function (i, o) {
+    //entities[o.abbr] = data.data[o.abbr];
+    entities[o.abbr] = entitiesFromServer(data.data[o.abbr].url);
+});
+
 var renderResourcesBar = function () {
 
     var html = "";
@@ -126,5 +134,23 @@ var renderCollisionResults = function (results) {
         "results": results,
     }
     var html = template("resultsbar", obj);
-    $("body").append(html);
+    if (jQuery(".resultsbar-container").length == 0) {
+        $("body").append(html);
+        $(".resultsbar-close").click(function () {
+            $(".resultsbar-container").remove();
+        });
+    }
 }
+
+//绑定checkbox change事件
+jQuery.each(data.data, function (i, o) {
+    jQuery(".data-check-" + o.abbr).change(function (thi) {
+        if (this.checked === true) {
+            //console.log(this);
+            loadEntities(entities[this.value]);
+        }
+        else {
+
+        }
+    });
+})

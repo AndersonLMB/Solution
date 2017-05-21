@@ -93,19 +93,36 @@ var entitiesFromServer = function (url) {
         success: function (rs) { result = rs; },
     });
     result = JSON.parse(result);
-    var arrays = [];
-    jQuery.each(result.features, function (i, o) {
-        if (o.geometry.paths.length === 1) {
-            var temparray = [];
-            jQuery.each(o.geometry.paths[0], function (j, m) {
-                temparray.push(m[0]);
-                temparray.push(m[1]);
-                temparray.push(m[2]);
-            });
-            arrays.push(temparray);
-        }
-    });
-    o = arrays;
+    if (result.geometryType == "esriGeometryPolyline") {
+        var arrays = [];
+        jQuery.each(result.features, function (i, o) {
+            if (o.geometry.paths.length === 1) {
+                var temparray = [];
+                jQuery.each(o.geometry.paths[0], function (j, m) {
+                    temparray.push(m[0]);
+                    temparray.push(m[1]);
+                    temparray.push(m[2]);
+                });
+                arrays.push(temparray);
+            }
+        });
+        o = arrays;
+    }
+    if (result.geometryType == "esriGeometryPoint") {
+        var arrays = [];
+        //jQuery.each(result.features, function (i, o) {
+        //    if (o.geometry.paths.length === 1) {
+        //        var temparray = [];
+        //        jQuery.each(o.geometry.paths[0], function (j, m) {
+        //            temparray.push(m[0]);
+        //            temparray.push(m[1]);
+        //            temparray.push(m[2]);
+        //        });
+        //        arrays.push(temparray);
+        //    }
+        //});
+        o = arrays;
+    }
     return o;
 }
 
@@ -242,4 +259,6 @@ var collisionCheck = function () {
     //f1 = readFeatureFromURL("http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/1");
     //intersectFeatures(f0, f1);
 }
+
+
 
