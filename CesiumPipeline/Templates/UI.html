@@ -85,17 +85,44 @@
                     <th>于要素2的高程</th>
                 </tr>
                 {{each results as value i}}
+
                 <tr>
-                <td>{{i}}</td>
-                <td>[{{value.coordinate[0]}},{{value.coordinate[1]}}]</td>
-                <td></td>
-                <td>{{value.height1}}</td>
-                <td></td>
-                <td>{{value.height2}}</td>
+                    <td>{{i}}</td>
+                    <td>[{{value.coordinate[0]}},{{value.coordinate[1]}}]</td>
+                    <td></td>
+                    <td>{{value.height1}}</td>
+                    <td></td>
+                    <td>{{value.height2}}</td>
                 </tr>
                 {{/each}}
             </table>
         </div>
 
+    </div>
+</script>
+
+<script type="text/html" id="editor">
+    <div class="editor-container">
+        <div class="header-container">
+            <span class="headbar-title-container"></span><span class="editor-close">关闭</span>
+        </div>
+        <div class="body-container">
+            <table>
+                <tr>
+                    <th>属性</th>
+                    <th>值</th>
+                </tr>
+                {{each attributes as value i}}
+
+                {{if value.display==true}}
+                <tr>
+                    <td>{{value.name}}</td>
+                    <td class="editor-val-{{value.name}}" contenteditable="true">{{value.val}}</td>
+                </tr>{{/if}}
+                {{/each}}
+            </table>
+        </div>
+        <div><button class="editor-apply">确认修改</button></div>
+        <div class="editor-result"></div>
     </div>
 </script>

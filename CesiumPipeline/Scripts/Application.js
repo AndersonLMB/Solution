@@ -42,18 +42,22 @@ imageryLayers.addImageryProvider(ArcGIS_WMTS_Provider);
 
 var loadEntities = function (entitiesFromServer) {
     jQuery.each(entitiesFromServer, function (i, o) {
-        var orangeOutlined = viewer.entities.add({
-            name: 'Orange line with black outline at height and following the surface',
+        var entity = new Cesium.Entity({
+            name: "",
+            id: o.id,
             polyline: {
-                positions: Cesium.Cartesian3.fromDegreesArrayHeights(o),
+                positions: Cesium.Cartesian3.fromDegreesArrayHeights(o.geometry),
                 width: 5,
                 material: new Cesium.PolylineOutlineMaterialProperty({
-                    color: Cesium.Color.ORANGE,
+                    color: Cesium.Color.BLUE,
                     outlineWidth: 2,
                     outlineColor: Cesium.Color.BLACK
                 })
             }
-        })
+        });
+        entity.addProperty("url");
+        entity.url = o.url;
+        var orangeOutlined = viewer.entities.add(entity);
     });
 
     function computeCircle(radius) {
@@ -65,13 +69,17 @@ var loadEntities = function (entitiesFromServer) {
         return positions;
     };
     jQuery.each(entitiesFromServer, function (i, o) {
-        viewer.entities.add({
+        var entity = new Cesium.Entity({
+            id: o.id,
             polylineVolume: {
-                positions: Cesium.Cartesian3.fromDegreesArrayHeights(o),
-                shape: computeCircle(0.5),
-                material: Cesium.Color.RED
+                positions: Cesium.Cartesian3.fromDegreesArrayHeights(o.geometry),
+                shape: computeCircle(2),
+                material: Cesium.Color.BLUE,
             }
         });
+        entity.addProperty("url");
+        entities.url = o.url;
+        viewer.entities.add(entity);
     });
 }
 
@@ -96,14 +104,18 @@ var entitiesFromServer = function (url) {
     if (result.geometryType == "esriGeometryPolyline") {
         var arrays = [];
         jQuery.each(result.features, function (i, o) {
-            if (o.geometry.paths.length === 1) {
-                var temparray = [];
-                jQuery.each(o.geometry.paths[0], function (j, m) {
-                    temparray.push(m[0]);
-                    temparray.push(m[1]);
-                    temparray.push(m[2]);
-                });
-                arrays.push(temparray);
+            var temparray = { id: "", url: "", geometry: [] };
+            temparray.id = o.attributes.OBJECTID_1;
+            temparray.url = url;
+            if (o.geometry) {
+                if (o.geometry.paths.length === 1 && o.geometry != undefined) {
+                    jQuery.each(o.geometry.paths[0], function (j, m) {
+                        temparray.geometry.push(m[0]);
+                        temparray.geometry.push(m[1]);
+                        temparray.geometry.push(m[2]);
+                    });
+                    arrays.push(temparray);
+                }
             }
         });
         o = arrays;
@@ -259,6 +271,5 @@ var collisionCheck = function () {
     //f1 = readFeatureFromURL("http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/1");
     //intersectFeatures(f0, f1);
 }
-
 
 

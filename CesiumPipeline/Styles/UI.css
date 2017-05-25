@@ -29,3 +29,17 @@
     position: absolute;
     background-color: white;
 }
+
+.editor-container {
+    background-color: white;
+    position: absolute;
+    font-family: nsimsun;
+    font-size: 9px;
+    top: 100px;
+    left: 500px;
+}
+
+.body-container {
+    overflow-y: scroll;
+    max-height: 200px;
+}

@@ -1,6 +1,7 @@
 ﻿/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/template.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jquery-3.2.1.js" />
 /// <reference path="Application.js" />
+/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Cesium/Cesium.js" />
 
 var assertTemplates = function () {
     var tpl = "";
@@ -72,7 +73,7 @@ var data = {
             title: "攀枝花排水管线",
             abbr: "PSGX",
             type: "Polyline",
-            url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/1",
+            url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test2/FeatureServer/1",
         },
         //"PSGD": {
         //    title: "攀枝花排水管点",
@@ -84,7 +85,7 @@ var data = {
             title: "攀枝花燃气管线",
             abbr: "RQGX",
             type: "Polyline",
-            url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/0",
+            url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test2/FeatureServer/0",
         },
     },
     analysis: [
@@ -150,7 +151,122 @@ jQuery.each(data.data, function (i, o) {
             loadEntities(entities[this.value]);
         }
         else {
-
         }
     });
-})
+});
+
+var isCN = function (temp) {
+    var re = /[^\u4e00-\u9fa5]/;
+    if (re.test(temp)) return false;
+    return true;
+}
+
+var isNum = function (temp, fields) {
+    var result;
+    jQuery.each(fields, function (i, o) {
+        if (temp === o.name) {
+            if (o.type != "esriFieldTypeString") {
+                result = true;
+            }
+            else {
+                result = false
+            }
+        }
+
+    });
+    return result;
+}
+
+//渲染编辑器面板
+//id:objectid
+var renderEditor = function (id, url) {
+    var result;
+    var data = { "attributes": "" };
+    var attributes = jQuery.ajax({
+        url: url + "/query",
+        method: "GET",
+        async: false,
+        data: {
+            where: "OBJECTID_1=" + id,
+            outFields: "*",
+            returnZ: true,
+            f: "pjson"
+        },
+        success: function (rs) { result = rs; },
+    });
+    result = JSON.parse(result);
+    data.attributes = result.fields;
+    jQuery.each(data.attributes, function (i, o) {
+        o.val = result.features[0].attributes[o.name];
+        if (isCN(o.name)) {
+            o.display = true;
+        }
+    });
+    var html = template("editor", data);
+    jQuery("body").append(html);
+    jQuery(".editor-apply").click(function () {
+        executeEdit(id, result.fields, url);
+    });
+    jQuery(".editor-close").click(function () {
+        jQuery(".editor-container").remove()
+    });
+}
+
+//执行编辑
+var executeEdit = function (id, fields, url) {
+    var Attributes = [];
+    jQuery.each(fields, function (i, o) {
+        Attributes.push(o.name);
+    });
+    var cnAttributes = [];
+    var data = {};
+    jQuery.each(Attributes, function (i, o) {
+        if (isCN(o)) {
+            cnAttributes.push(o);
+        }
+    });
+    jQuery.each(cnAttributes, function (i, o) {
+        if (isNum(o, fields)) {
+            data[o] = Number(jQuery(".editor-val-" + o).html());
+        }
+        else {
+            data[o] = jQuery(".editor-val-" + o).html();
+        }
+        if (jQuery(".editor-val-" + o).html() === " ") {
+            data[o] = "";
+        }
+    });
+    data["OBJECTID_1"] = id;
+    var features = "[{\"attributes\":" + JSON.stringify(data) + "}]";
+    jQuery.ajax({
+        url: url + "/updateFeatures",
+        method: "POST",
+        async: false,
+        data: {
+            f: "pjson",
+            features: features,
+        },
+        success: function (rs) {
+            if (JSON.parse(rs).updateResults[0].success == true) {
+                jQuery(".editor-result").html("OBJECTID_1:" + JSON.parse(rs).updateResults[0].objectId + "更新成功");
+            }
+        }
+    });
+}
+
+//选取entity
+var scene = viewer.scene;
+var handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+var pickedObject;
+handler.setInputAction(function (movement) {
+    pickedObject = scene.pick(movement.position);
+    if (Cesium.defined(pickedObject)) {
+        if (jQuery(".editor-container").length === 0) {
+            renderEditor(pickedObject.id.id, pickedObject.id.url)
+        } else {
+        }
+    }
+}, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+
+
+
