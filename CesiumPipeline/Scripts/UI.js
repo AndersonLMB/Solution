@@ -3,6 +3,24 @@
 /// <reference path="Application.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Cesium/Cesium.js" />
 
+var fill = new ol.style.Fill({
+    color: 'rgba(255,255,255,0.4)'
+});
+var stroke = new ol.style.Stroke({
+    color: '#3399CC',
+    width: 1.25
+});
+var styles = [
+  new ol.style.Style({
+      image: new ol.style.Circle({
+          fill: fill,
+          stroke: stroke,
+          radius: 5
+      }),
+      fill: fill,
+      stroke: stroke
+  })
+];
 var assertTemplates = function () {
     var tpl = "";
     var result = null;
@@ -33,6 +51,11 @@ var renderFunctionBar = function () {
 
 }
 var data = {
+    services: [
+    {
+        url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test2/MapServer"
+    }
+    ],
     resources: [
         {
             "type": "terrainSelector",
@@ -268,5 +291,74 @@ handler.setInputAction(function (movement) {
     }
 }, Cesium.ScreenSpaceEventType.LEFT_CLICK)
 
+var drawFeatures = new ol.Collection();
+var drawLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+        features: drawFeatures
+    }),
+    style: styles,
+});
+var olmap;
+//Openlayers地图
+var renderOpenlayersMap = function () {
+    var renderOptions = {
+
+    };
+    var html = template("olmap", renderOptions);
+    $("body").append(html);
+    var layers = [
+        new ol.layer.Tile({
+            source: new ol.source.TileArcGISRest({ url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" })
+        }),
+        new ol.layer.Tile({
+            source: new ol.source.TileArcGISRest({
+                url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test2/MapServer"
+            })
+        }),
+        drawLayer
+    ];
+
+    var map = new ol.Map({
+        view: new ol.View({
+            center: [0, 0],
+            zoom: 2,
+            projection: "EPSG:4326"
+        }),
+        layers: layers,
+        target: "map",
+    });
+    olmap = map;
+    jQuery(".stat-polygon").click(function(){
+        executeStat( drawFeatures.getArray()[0], jQuery(".stat-field").val());
+    });
+    jQuery(".map-draw").click(function () {
+        activeDraw(map);
+    });
+}
+
+//激活绘制
+var activeDraw = function (map) {
+    drawLayer.getSource().clear();
+    var draw = new ol.interaction.Draw({
+        features: drawFeatures,
+        type: "Polygon",
+    });
+    draw.on("drawend", function () {
+        map.removeInteraction(draw);
+    })
+    map.addInteraction(draw);
+}
+
+renderOpenlayersMap();
+
+//resultsbar清空
+var clearResultsBar = function () {
+    jQuery(".resultsbar-content").html("");
+}
+
+//resultsbar添加内容
+var addToResultsBar = function (html) {
+    jQuery(".resultsbar-content").html(html);
+}
 
 

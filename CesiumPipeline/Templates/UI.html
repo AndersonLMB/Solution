@@ -74,7 +74,7 @@
 <script type="text/html" id="resultsbar">
     <div class="resultsbar-container">
         <div> <span class="resultsbar-close">关闭</span> </div>
-        <div>
+        <div class="resultsbar-content">
             <table>
                 <tr>
                     <th>#</th>
@@ -124,5 +124,28 @@
         </div>
         <div><button class="editor-apply">确认修改</button></div>
         <div class="editor-result"></div>
+    </div>
+</script>
+
+<script type="text/html" id="olmap">
+    <div class="map-container">
+        <div class="map-head">
+            <span class="map-collapse">展开/收缩</span>
+            <span class="map-title-text"></span>
+        </div>
+        <div class="map-stat">
+            统计类型
+            <select class="stat-field">
+                <option>管线材质</option>
+                <option>埋设时间</option>
+                <option>材质</option>
+            </select>
+            <button class="map-draw">绘制多边形</button>
+            <button class="stat-polygon">统计多边形</button>
+            <button>统计全部</button>
+        </div>
+        <div id="map" class="map">
+
+        </div>
     </div>
 </script>

@@ -22,12 +22,16 @@
     font-family: nsimsun;
     font-size: 9px;
     top: 10%;
-    left: 50%;
-    overflow-y: scroll;
+    left: 20%;
     min-width: 400px;
     z-index: 200;
     position: absolute;
     background-color: white;
+}
+
+.resultsbar-content {
+    min-height: 300px;
+    overflow-y: scroll;
 }
 
 .editor-container {
@@ -42,4 +46,25 @@
 .body-container {
     overflow-y: scroll;
     max-height: 200px;
+}
+
+.map-container {
+    position: absolute;
+    right: 0px;
+    top: 100px;
+    background-color: white;
+    height: 220px;
+    width: 450px;
+}
+
+.map-head {
+    height: 10%;
+}
+
+.map-stat {
+    height: 10%;
+}
+
+.map {
+    height: 80%;
 }

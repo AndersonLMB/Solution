@@ -8,7 +8,9 @@
     <title>Hello World</title>
     <script src="Lib/template.js"></script>
     <script src="Lib/jquery-3.2.1.js"></script>
+    <script src="Lib/echarts.common.min.js"></script>
     <script src="Lib/ol.js"></script>
+    <link href="Lib/ol.css" rel="stylesheet" />
     <script src="Lib/jsts.js"></script>
     <script src="Cesium/Cesium.js"></script>
     <link href="Cesium/Widgets/widgets.css" rel="stylesheet" />

@@ -1,4 +1,5 @@
-﻿/// <reference path="UI.js" />
+﻿/// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/echarts.common.min.js" />
+/// <reference path="UI.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/jquery-3.2.1.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Cesium/Cesium.js" />
 /// <reference path="C:\Users\ander\documents\visual studio 2015\Projects\Solution\CesiumPipeline\Lib/ol.js" />
@@ -142,6 +143,7 @@ var entitiesFromServer = function (url) {
 //输入url
 //返回 Array<ol.feature>
 var readFeatureFromURL = function (url) {
+    url = url.replace("FeatureServer", "MapServer");
     var parser = new ol.format.EsriJSON();
     var features = [];
     var feature;
@@ -272,4 +274,108 @@ var collisionCheck = function () {
     //intersectFeatures(f0, f1);
 }
 
+//extent: "all" || ol.Feature
+var executeStat = function (extent, arg) {
+    var results = {};
+    if (extent != "all") {
+        results = queryPolygon(extent, arg);
+    }
+    console.log(results);
+    var arrs = arrEchart(results, arg);
+    var option = {};
+    var myChart = echarts.init(jQuery(".resultsbar-content")[0]);// echarts.init(document.getElementById('main')
+    option = {
+        color: ['#3398DB'],
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: arrs[0],
+                axisTick: {
+                    alignWithLabel: true
+                }
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value'
+            }
+        ],
+        series: [
+            {
+                name: '直接访问',
+                type: 'bar',
+                barWidth: '60%',
+                data: arrs[1]
+            }
+        ]
+    };
+    myChart.setOption(option);
+}
 
+//query.features => echart数据
+var arrEchart = function (json, arg) {
+    var tags = [], counts = [];
+    var outArrs = [[], []];
+    jQuery.each(json, function (i, o) {
+        var tag = "null";
+        jQuery.each(tags, function (j, m) {
+            //已有该tag
+            if (o.attributes[arg] === m) {
+                counts[m] = counts[m] + 1;
+                tag = m;
+            }
+        });
+        //尚未有该tag
+        if (tag === "null") {
+            tags.push(o.attributes[arg]);//tags增加该标签
+            counts[o.attributes[arg]] = 1;
+        }
+    });
+
+    outArrs[0] = Object.keys(counts);
+    jQuery.each(outArrs[0], function (i, o) {
+        outArrs[1][i] = counts[o];
+    });
+    return outArrs;
+
+}
+
+//polygon: ol.Feature
+var queryPolygon = function (polygon, arg) {
+    var result;
+    var format = new ol.format.EsriJSON();
+    var obj = format.writeFeatureObject(polygon);
+    var geom = obj.geometry;
+    geom = JSON.stringify(geom);
+    qdata = {
+        where: "objectid>0",
+        geometry: geom,
+        geometryType: "esriGeometryPolygon",
+        outFields: arg,
+        returnZ: true,
+        f: "pjson"
+    }
+    jQuery.ajax({
+        url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test2/MapServer/1/query",
+        method: "GET",
+        data: qdata,
+        async: false,
+        success: function (rs) {
+            result = rs;
+        }
+    });
+    result = JSON.parse(result);
+    return result.features;
+}

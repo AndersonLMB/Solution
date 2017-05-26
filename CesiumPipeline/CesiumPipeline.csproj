@@ -353,9 +353,11 @@
     <Content Include="Cesium\Workers\transcodeCRNToDXT.js" />
     <Content Include="Cesium\Workers\transferTypedArrayTest.js" />
     <Content Include="Cesium\Workers\upsampleQuantizedTerrainMesh.js" />
+    <Content Include="Lib\echarts.common.min.js" />
     <Content Include="Lib\jquery-3.2.1.js" />
     <Content Include="Lib\jquery.js" />
     <Content Include="Lib\jsts.js" />
+    <Content Include="Lib\ol.css" />
     <Content Include="Lib\ol.js" />
     <Content Include="Lib\template.js" />
     <Content Include="packages.config" />
