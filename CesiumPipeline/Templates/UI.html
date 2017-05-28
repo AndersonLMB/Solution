@@ -66,7 +66,11 @@
                 </select>
                 <br />
                 <button class="collision-apply">确认</button>
+                <div>横截面分析</div>
+
+                <button class="analysis-intersect-surface">开始分析</button>
             </div>
+            
         </div>
     </div>
 </script>
@@ -79,20 +83,23 @@
                 <tr>
                     <th>#</th>
                     <th>Coordinate</th>
-                    <th>要素1</th>
-                    <th>于要素1的高程</th>
-                    <th>要素2</th>
-                    <th>于要素2的高程</th>
+                    <th>半径1</th>
+                    <th>高程1</th>
+                    <th>半径2</th>
+                    <th>高程2</th>
+                    <th>净距</th>
                 </tr>
                 {{each results as value i}}
 
                 <tr>
                     <td>{{i}}</td>
                     <td>[{{value.coordinate[0]}},{{value.coordinate[1]}}]</td>
-                    <td></td>
+                    <td>{{value.radius1}}</td>
                     <td>{{value.height1}}</td>
-                    <td></td>
+                    <td>{{value.radius2}}</td>
                     <td>{{value.height2}}</td>
+                    <td>{{value.heightDiff}}</td>
+                    <td>{{value.boolCollision}}</td>
                 </tr>
                 {{/each}}
             </table>
@@ -140,6 +147,7 @@
                 <option>埋设时间</option>
                 <option>材质</option>
             </select>
+            <button class="map-draw-polyline">垂直面</button>
             <button class="map-draw">绘制多边形</button>
             <button class="stat-polygon">统计多边形</button>
             <button>统计全部</button>
@@ -147,5 +155,13 @@
         <div id="map" class="map">
 
         </div>
+    </div>
+</script>
+
+<script type="text/html" id="analysisCanvas">
+    <div class="analysisCanvas-container">
+        <canvas id="analysisCanvas">
+
+        </canvas>
     </div>
 </script>

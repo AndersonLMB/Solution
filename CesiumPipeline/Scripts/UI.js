@@ -114,7 +114,6 @@ var data = {
     analysis: [
         {
             title: "碰撞分析",
-
         }
     ],
 };
@@ -177,6 +176,8 @@ jQuery.each(data.data, function (i, o) {
         }
     });
 });
+
+
 
 var isCN = function (temp) {
     var re = /[^\u4e00-\u9fa5]/;
@@ -328,26 +329,33 @@ var renderOpenlayersMap = function () {
         target: "map",
     });
     olmap = map;
-    jQuery(".stat-polygon").click(function(){
-        executeStat( drawFeatures.getArray()[0], jQuery(".stat-field").val());
+    jQuery(".stat-polygon").click(function () {
+        executeStat(drawFeatures.getArray()[0], jQuery(".stat-field").val());
     });
     jQuery(".map-draw").click(function () {
-        activeDraw(map);
+        activeDraw(map, "Polygon");
     });
+    jQuery(".map-collapse").click(function () {
+    })
+    jQuery(".map-draw-polyline").click(function () {
+        activeDraw(map, "LineString");
+    });
+
 }
 
 //激活绘制
-var activeDraw = function (map) {
+var activeDraw = function (map, type) {
     drawLayer.getSource().clear();
     var draw = new ol.interaction.Draw({
         features: drawFeatures,
-        type: "Polygon",
+        type: type,
     });
     draw.on("drawend", function () {
         map.removeInteraction(draw);
     })
     map.addInteraction(draw);
 }
+
 
 renderOpenlayersMap();
 
@@ -361,4 +369,102 @@ var addToResultsBar = function (html) {
     jQuery(".resultsbar-content").html(html);
 }
 
+jQuery(".analysis-intersect-surface").click(function () {
+    //analysisIntersectSurface(drawFeature);
+    analysisIntersectSurface();
+});
 
+var renderAnalysisCanvas = function (analysisData) {
+    var myChart = echarts.init(jQuery(".resultsbar-content")[0]);
+    var data = analysisData;
+    option = {
+        backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+            offset: 0,
+            color: '#f7f8fa'
+        }, {
+            offset: 1,
+            color: '#cdd0d5'
+        }]),
+        title: {
+            text: "横截面分析"
+        },
+        legend: {
+            right: 10,
+            data: ['1990', '2015']
+        },
+        xAxis: {
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            }, scale: true
+        },
+        yAxis: {
+            splitLine: {
+                lineStyle: {
+                    type: 'dashed'
+                }
+            },
+            scale: true
+        },
+        series: [{
+            name: '1990',
+            data: data[0].data,
+            type: 'scatter',
+            symbolSize: 10,
+            label: {
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(120, 36, 50, 0.5)',
+                    shadowOffsetY: 5,
+                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                        offset: 0,
+                        color: 'rgb(251, 118, 123)'
+                    }, {
+                        offset: 1,
+                        color: 'rgb(204, 46, 72)'
+                    }])
+                }
+            }
+        }, {
+            name: '2015',
+            data: data[1].data,
+            type: 'scatter',
+            symbolSize: 10,
+            label: {
+                emphasis: {
+                    show: true,
+                    formatter: function (param) {
+                        return param.data[3];
+                    },
+                    position: 'top'
+                }
+            },
+            itemStyle: {
+                normal: {
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(25, 100, 150, 0.5)',
+                    shadowOffsetY: 5,
+                    color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                        offset: 0,
+                        color: 'rgb(129, 227, 238)'
+                    }, {
+                        offset: 1,
+                        color: 'rgb(25, 183, 207)'
+                    }])
+                }
+            }
+        }]
+    }
+    console.log(option);
+    myChart.setOption(option);
+}

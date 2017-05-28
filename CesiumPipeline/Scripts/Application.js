@@ -226,7 +226,6 @@ var heigthPointOnPolyline = function (point, polyline) {
         return height;
     }
     else { return };
-
 }
 
 //features1, features2 : ol.Features
@@ -238,23 +237,34 @@ var intersectFeatures = function (features1, features2) {
         jQuery.each(features2, function (j, p) {
             intersection = computeIntersect(o, p);
             if (intersection.getType() == "Point") {
-                //TODO
                 var result = {
-                    feature1: "",
-                    feature2: "",
-                    height1: "",
-                    height2: "",
-                    coordinate: ""
+                    //feature1: "",
+                    //feature2: "",
+                    //radius1: "",
+                    //radius2: "",
+                    //height1: "",
+                    //height2: "",
+                    //coordinate: "",
+                    //heightDiff: "",
+                    //boolCollision: ""
                 };
                 point = intersection;
                 polyline1 = o.getGeometry();
                 polyline2 = p.getGeometry();
                 result.feature1 = o;
+                //result.radius1=Number(o.geoProperties()["管径"])
+                result.radius1 = 0.4;
                 result.feature2 = p;
+                //result.radius2 = Number(p.geoProperties()["管径"])
+                result.radius2 = 0.4;
                 result.height1 = heigthPointOnPolyline(point, polyline1);
                 result.height2 = heigthPointOnPolyline(point, polyline2);
                 result.coordinate = intersection.getCoordinates();
-                //----
+                result.heightDiff = Math.abs(result.height1 - result.height2) - result.radius1 - result.radius2;
+                if (result.heightDiff > 0) {
+                    result.boolCollision = "不碰撞"
+                }
+                else { result.boolCollision = "碰撞" }
                 results.push(result);
             }
         });
@@ -268,10 +278,6 @@ var collisionCheck = function () {
     features2 = readFeatureFromURL(data.data[jQuery(".features2").val()].url);
     var results = intersectFeatures(features1, features2);
     renderCollisionResults(results);
-    //console.log(results);
-    //f0 = readFeatureFromURL("http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/0");
-    //f1 = readFeatureFromURL("http://localhost:6080/arcgis/rest/services/PZH/PZH_test/MapServer/1");
-    //intersectFeatures(f0, f1);
 }
 
 //extent: "all" || ol.Feature
@@ -321,6 +327,7 @@ var executeStat = function (extent, arg) {
             }
         ]
     };
+    console.log(option);
     myChart.setOption(option);
 }
 
@@ -349,7 +356,6 @@ var arrEchart = function (json, arg) {
         outArrs[1][i] = counts[o];
     });
     return outArrs;
-
 }
 
 //polygon: ol.Feature
@@ -379,3 +385,59 @@ var queryPolygon = function (polygon, arg) {
     result = JSON.parse(result);
     return result.features;
 }
+
+//横截面分析
+//drawFeature:ol.Feature() (LineString)
+var analysisIntersectSurface = function (drawFeature) {
+
+    var format = new ol.format.EsriJSON();
+    var geom = format.writeFeatureObject(drawFeatures.getArray()[0]).geometry;
+    geom = JSON.stringify(geom);
+
+    var param = {
+        geometry: geom,
+        layers: "all",
+        geometryType: "esriGeometryPolyline",
+        tolerance: 0.5,
+        mapExtent: "-180,-90,180,90",
+        imageDisplay: "600,550,96",
+        returnGeometry: true,
+        returnZ: true,
+        f: "PJSON"
+    }
+    var analysisResult;
+    jQuery.ajax({
+        url: "http://localhost:6080/arcgis/rest/services/PZH/PZH_test2/MapServer/identify",
+        method: "GET",
+        async: false,
+        data: param,
+        success: function (rs) { analysisResult = rs; }
+    })
+    analysisResult = JSON.parse(analysisResult).results;
+    var array = [];
+    jQuery.each(analysisResult, function (i, o) {
+        var obj = format.readFeature(o);
+        obj["layer"] = o.layerName;
+        array.push(obj);
+    });
+    var ar2 = [drawFeatures.getArray()[0]];
+    var analysisResult = intersectFeatures(ar2, array);
+    var analysisData = {};
+    jQuery.each(analysisResult, function (i, o) {
+        analysisData[array[i].layer] = { name: array[i].layer, data: [] };
+    });
+    jQuery.each(analysisResult, function (i, o) {
+        var firstCoor = ol.proj.transform(drawFeatures.getArray()[0].getGeometry().getFirstCoordinate(), "EPSG:4326", "EPSG:3857");
+        var pCoor = ol.proj.transform(o.coordinate, "EPSG:4326", "EPSG:3857");
+        var dist = Math.sqrt((firstCoor[0] - pCoor[0]) * (firstCoor[0] - pCoor[0]) +
+                                  (firstCoor[1] - pCoor[1]) * (firstCoor[1] - pCoor[1]))
+        var obj = [dist, o.height2, 400, "", ""];
+        analysisData[array[i].layer].data.push(obj);
+    });
+    var j = 0;
+    var arr = [];
+    jQuery.each(analysisData, function (i, o) {
+        arr[j] = o;
+        j++;
+    });
+    renderAnalysisCanvas(arr);
