@@ -441,3 +441,4 @@ var analysisIntersectSurface = function (drawFeature) {
         j++;
     });
     renderAnalysisCanvas(arr);
+}

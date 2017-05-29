@@ -15,8 +15,8 @@
     <script src="Cesium/Cesium.js"></script>
     <link href="Cesium/Widgets/widgets.css" rel="stylesheet" />
     <script src="Scripts/Main.js" defer="defer"></script>
-    <script src="Scripts/Collision.js"></script>
     <script src="Scripts/Application.js" defer="defer"></script>
+    <script src="Scripts/Collision.js"></script>
     <script src="Scripts/UI.js" defer="defer"></script>
     <link href="Styles/Main.css" rel="stylesheet" />
     <link href="Styles/UI.css" rel="stylesheet" />
