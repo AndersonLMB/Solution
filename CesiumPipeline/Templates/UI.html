@@ -26,6 +26,11 @@
         <div class="resourcesbar-title">
             资源
         </div>
+        <div>
+            <div>主动<span>关联<input type="checkbox" checked="checked" id="lockmap" /></span></div>
+            <input type="radio" name="Controler" value="Cesium" checked="checked" />Cesium<br />
+            <input type="radio" name="Controler" value="OpenLayers" />OpenLayers<br />
+        </div>
         {{each resources as value i}}
         <div class="resource-container">
             <div class="resource-title">{{value.title}}</div>
@@ -70,7 +75,7 @@
 
                 <button class="analysis-intersect-surface">开始分析</button>
             </div>
-            
+
         </div>
     </div>
 </script>
@@ -160,8 +165,6 @@
 
 <script type="text/html" id="analysisCanvas">
     <div class="analysisCanvas-container">
-        <canvas id="analysisCanvas">
-
-        </canvas>
+        <canvas id="analysisCanvas"></canvas>
     </div>
 </script>

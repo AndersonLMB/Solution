@@ -442,3 +442,33 @@ var analysisIntersectSurface = function (drawFeature) {
     });
     renderAnalysisCanvas(arr);
 }
+
+//cesium地图移动事件添加监听
+viewer.camera.moveEnd.addEventListener(function () {
+
+    if ((document.querySelector('input[name="Controler"]:checked').value === "Cesium") && (document.querySelector("#lockmap").checked)) {
+        var rect = viewer.camera.computeViewRectangle();
+        changeOLMapExtent([rect.west * 57.29, rect.south * 57.29, rect.east * 57.29, rect.north * 57.29], olmap);
+    }
+});
+
+var evnt;
+
+
+//改变OpenLayers地图的extent
+//west south east north
+var changeOLMapExtent = function (extent, map) {
+    var view = map.getView();
+    view.fit(extent, olmap.getSize());
+}
+
+//改变cesiumd地图的extent
+//extent: ol.Extent
+//viewer cesium.Viewer
+var changeCesiumExtent = function (extent, cviewer) {
+    var camera = cviewer.camera;
+    camera.flyTo({
+        destination: Cesium.Rectangle.fromDegrees(extent[0], extent[1], extent[2], extent[3])
+    })
+
+}

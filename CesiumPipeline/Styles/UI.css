@@ -54,15 +54,15 @@
     top: 100px;
     background-color: white;
     height: 220px;
-    width: 450px;
+    width: 500px;
 }
 
 .map-head {
-    height: 10%;
+    min-height: 10%;
 }
 
 .map-stat {
-    height: 10%;
+    min-height: 10%;
 }
 
 .map {

@@ -329,6 +329,15 @@ var renderOpenlayersMap = function () {
         target: "map",
     });
     olmap = map;
+    //OpenLayers地图移动事件监听
+    olmap.on('moveend', function (evt) {
+        if ((document.querySelector('input[name="Controler"]:checked').value === "OpenLayers") && (document.querySelector("#lockmap").checked)) {
+            evnt = evt;
+            var view = olmap.getView();
+            var extent = view.calculateExtent(olmap.getSize());
+            changeCesiumExtent(extent, viewer);
+        }
+    });
     jQuery(".stat-polygon").click(function () {
         executeStat(drawFeatures.getArray()[0], jQuery(".stat-field").val());
     });
@@ -390,7 +399,7 @@ var renderAnalysisCanvas = function (analysisData) {
         },
         legend: {
             right: 10,
-            data: ['1990', '2015']
+            data: ['A', 'B']
         },
         xAxis: {
             splitLine: {
@@ -408,7 +417,7 @@ var renderAnalysisCanvas = function (analysisData) {
             scale: true
         },
         series: [{
-            name: '1990',
+            name: 'A',
             data: data[0].data,
             type: 'scatter',
             symbolSize: 10,
@@ -436,10 +445,10 @@ var renderAnalysisCanvas = function (analysisData) {
                 }
             }
         }, {
-            name: '2015',
+            name: 'B',
             data: data[1].data,
             type: 'scatter',
-            symbolSize: 10,
+            symbolSize: 12,
             label: {
                 emphasis: {
                     show: true,
