@@ -282,6 +282,9 @@ var collisionCheck = function () {
 
 //extent: "all" || ol.Feature
 var executeStat = function (extent, arg) {
+    $(".resultsbar-content").html("");
+    //$(".resultsbar-content").remove();
+    //jQuery(".resultsbar-container").append("")
     var results = {};
     if (extent != "all") {
         results = queryPolygon(extent, arg);
@@ -420,6 +423,7 @@ var analysisIntersectSurface = function (drawFeature) {
         obj["layer"] = o.layerName;
         array.push(obj);
     });
+    //获取drawFeature
     var ar2 = [drawFeatures.getArray()[0]];
     var analysisResult = intersectFeatures(ar2, array);
     var analysisData = {};
@@ -440,12 +444,76 @@ var analysisIntersectSurface = function (drawFeature) {
         arr[j] = o;
         j++;
     });
+    //在viewer中绘制垂直面
+    addVerticalSurface(drawFeatures);
+    addPointPolylineViaSurfaceAnalysis(analysisResult, drawFeatures);
     renderAnalysisCanvas(arr);
 }
 
+//在viewer中绘制垂直面
+//feature: ol.Feature()
+var addVerticalSurface = function (feature) {
+    var coords = feature.getArray()[0].getGeometry().getCoordinates();
+    viewer.entities.add({
+        name: "VtcSrfc",
+        wall: {
+            positions: Cesium.Cartesian3.fromDegreesArrayHeights([coords[0][0], coords[0][1], 1200, coords[1][0], coords[1][1], 1200]),
+            minimumHeights: [1000, 1000],
+            material: Cesium.Color.BLUE.withAlpha(0.3),
+        }
+    })
+}
+
+//在viewer中绘制横截面分析中的线和点
+//analysisResult:analysisResult
+var addPointPolylineViaSurfaceAnalysis = function (analysisResult, drawFeatures) {
+    jQuery.each(analysisResult, function (i, o) {
+        renderPointInViewer(o, drawFeatures);
+    });
+}
+
+//渲染analysisResult的某点
+//obj:analysis[]
+var renderPointInViewer = function (obj, drawFeatures) {
+    //加点(球)
+    viewer.entities.add({
+        name: "Sphere",
+        position: Cesium.Cartesian3.fromDegrees(obj.coordinate[0], obj.coordinate[1], obj.height2),
+        ellipsoid: {
+            radii: new Cesium.Cartesian3(6.1, 6.1, 6.1),
+            material: Cesium.Color.YELLOW.withAlpha(0.8)
+        },
+    })
+    //var LC = drawFeatures.getArray()[0].getGeometry().getCoordinates();
+    //加水平线
+    //viewer.entities.add({
+    //    name: "HorizonalLine",
+    //    polyline: {
+    //        position: Cesium.Cartesian3.fromDegreesArrayHeights([LC[0][0], LC[0][1], obj.height2, LC[1][0], LC[1][1], obj.height2]),
+    //        material: Cesium.Color.RED,
+    //        //material: new Cesium.PolylineGlowMaterialProperty({
+    //        //    glowPower: 0.2,
+    //        //    color: Cesium.Color.BLUE
+    //        //}),
+    //        width: 10
+    //    }
+
+    //});
+    //////加垂直线
+    ////viewer.entities.add({
+    ////    name: "VeriticalLine",
+    ////    position: Cesium.Cartesian3.fromDegreesArrayHeights([obj.coordinate[0], obj.coordinate[1], 0, obj.coordinate[0], obj.coordinate[1], obj.height2]),
+    ////    material: new Cesium.PolylineGlowMaterialProperty({
+    ////        glowPower: 0.2,
+    ////        color: Cesium.Color.BLUE
+    ////    })
+    ////});
+
+}
+
+
 //cesium地图移动事件添加监听
 viewer.camera.moveEnd.addEventListener(function () {
-
     if ((document.querySelector('input[name="Controler"]:checked').value === "Cesium") && (document.querySelector("#lockmap").checked)) {
         var rect = viewer.camera.computeViewRectangle();
         changeOLMapExtent([rect.west * 57.29, rect.south * 57.29, rect.east * 57.29, rect.north * 57.29], olmap);
@@ -453,7 +521,6 @@ viewer.camera.moveEnd.addEventListener(function () {
 });
 
 var evnt;
-
 
 //改变OpenLayers地图的extent
 //west south east north

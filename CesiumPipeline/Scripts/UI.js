@@ -35,6 +35,7 @@ var assertTemplates = function () {
     renderHeadbar();
     renderFunctionBar();
     renderResourcesBar();
+    renderResultsBar();
 };
 
 var renderUI = function () {
@@ -46,6 +47,20 @@ var renderHeadbar = function () {
     html = template("headbar", data);
     jQuery("body").append(html);
 }
+
+var renderResultsBar = function () {
+    var obj = {};
+    var html = template("resultsbar", obj);
+    $("body").append(html);
+    $(".resultsbar-collapse").click(function () {
+        if (jQuery(".resultsbar-content").css("display") != "none") {
+            jQuery(".resultsbar-content").css({ "display": "none" });
+        } else {
+            jQuery(".resultsbar-content").css({ "display": "" });
+        }
+    })
+
+};
 
 var renderFunctionBar = function () {
 
@@ -59,7 +74,7 @@ var data = {
     resources: [
         {
             "type": "terrainSelector",
-            "title": "地形服务",
+            "title": "--地形服务--",
             "options": [
                 {
                     "title": "STK地形服务",
@@ -130,6 +145,13 @@ var renderResourcesBar = function () {
     var html = "";
     html = template("resourcesbar", data);
     jQuery("body").append(html);
+    jQuery(".resourcesbar-collapse").click(function () {
+        if (jQuery(".resourcesbar-container-content").css("display") != "none") {
+            jQuery(".resourcesbar-container-content").css({ "display": "none" });
+        } else {
+            jQuery(".resourcesbar-container-content").css({ "display": "" });
+        }
+    });
 };
 
 assertTemplates();
@@ -156,12 +178,14 @@ var renderCollisionResults = function (results) {
     var obj = {
         "results": results,
     }
-    var html = template("resultsbar", obj);
-    if (jQuery(".resultsbar-container").length == 0) {
-        $("body").append(html);
-        $(".resultsbar-close").click(function () {
-            $(".resultsbar-container").remove();
-        });
+    var html = template("collision-check-table", obj);
+    if (jQuery(".resultsbar-content").length != 0) {
+        $(".resultsbar-content").html("");
+        $(".resultsbar-content").append(html);
+
+        //$(".resultsbar-close").click(function () {
+        //    $(".resultsbar-container").remove();
+        //});
     }
 }
 
@@ -307,6 +331,14 @@ var renderOpenlayersMap = function () {
     };
     var html = template("olmap", renderOptions);
     $("body").append(html);
+    //map-collapse
+    jQuery(".map-collapse").click(function () {
+        if (jQuery(".map").css("display") != "none") {
+            jQuery(".map").css({ "display": "none" });
+        } else {
+            jQuery(".map").css({ "display": "" });
+        }
+    });
     var layers = [
         new ol.layer.Tile({
             source: new ol.source.TileArcGISRest({ url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" })
@@ -375,6 +407,7 @@ var clearResultsBar = function () {
 
 //resultsbar添加内容
 var addToResultsBar = function (html) {
+    $(".resultsbar-content").html("");
     jQuery(".resultsbar-content").html(html);
 }
 

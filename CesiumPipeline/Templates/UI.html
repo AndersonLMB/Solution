@@ -11,79 +11,84 @@
 
 <script type="text/html" id="headbar">
     <div class="headbar-container">
-        <span class="headbar-title-container">三维管线综合系统</span>
+        <!--<span class="headbar-title-container">三维管线综合系统</span>
         <span>
             <select>
                 <option>Option1</option>
                 <option>Option2</option>
             </select>
-        </span>
+        </span>-->
     </div>
 </script>
 
 <script type="text/html" id="resourcesbar">
-    <div class="resourcesbar-container">
-        <div class="resourcesbar-title">
-            资源
-        </div>
-        <div>
-            <div>主动<span>关联<input type="checkbox" checked="checked" id="lockmap" /></span></div>
-            <input type="radio" name="Controler" value="Cesium" checked="checked" />Cesium<br />
-            <input type="radio" name="Controler" value="OpenLayers" />OpenLayers<br />
-        </div>
-        {{each resources as value i}}
-        <div class="resource-container">
-            <div class="resource-title">{{value.title}}</div>
-            <div class="resource-content">
-                <select class="{{value.type}}">
-                    {{each value.options as value1 j}}
-                    <option value="{{value1.val}}">{{value1.title}}</option>
-                    {{/each}}
-                </select>
+    <div class="resourcesbar-container container">
+        <div class="resourcesbar-head resourcesbar-collapse">主菜单</div>
+        <div class="resourcesbar-container-content">
+            <div class="resourcesbar-title">
+                --联动--
             </div>
-        </div>
-        {{/each}}
-
-        <div class="databar-title">
-            <br />
-            数据
-        </div>
-        <div class="data-container">
-            {{each data as value i}}
-            <input class="data-check-{{value.abbr}}" type="checkbox" value="{{value.abbr}}" />{{value.title}}<br />
+            <div>
+                <div><span>关联<input type="checkbox" checked="checked" id="lockmap" /></span></div>
+                <input type="radio" name="Controler" value="Cesium" checked="checked" />Cesium<br />
+                <input type="radio" name="Controler" value="OpenLayers" />OpenLayers<br />
+            </div>
+            {{each resources as value i}}
+            <div class="resource-container">
+                <div class="resource-title">{{value.title}}</div>
+                <div class="resource-content">
+                    <select class="{{value.type}}">
+                        {{each value.options as value1 j}}
+                        <option value="{{value1.val}}">{{value1.title}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
             {{/each}}
-        </div>
-        <div class="analysisbar-title">
-            <br />
-            分析
-            <div class="analysis">
-                <div>碰撞分析</div>
-                <select class="features1">
-                    {{each data as value i}}
-                    <option value="{{value.abbr}}">{{value.title}}</option>
-                    {{/each}}
-                </select>
-                <br />
-                <select class="features2">
-                    {{each data as value i}}
-                    <option value="{{value.abbr}}">{{value.title}}</option>
-                    {{/each}}
-                </select>
-                <br />
-                <button class="collision-apply">确认</button>
-                <div>横截面分析</div>
 
-                <button class="analysis-intersect-surface">开始分析</button>
+            <div class="databar-title">
+                <br />
+                --数据--
             </div>
+            <div class="data-container">
+                {{each data as value i}}
+                <input class="data-check-{{value.abbr}}" type="checkbox" value="{{value.abbr}}" />{{value.title}}<br />
+                {{/each}}
+            </div>
+            <div class="analysisbar-title">
+                <br />
+                --分析--
+                <div class="analysis">
+                    <div>碰撞分析</div>
+                    <select class="features1">
+                        {{each data as value i}}
+                        <option value="{{value.abbr}}">{{value.title}}</option>
+                        {{/each}}
+                    </select>
+                    <br />
+                    <select class="features2">
+                        {{each data as value i}}
+                        <option value="{{value.abbr}}">{{value.title}}</option>
+                        {{/each}}
+                    </select>
+                    <br />
+                    <button class="collision-apply">确认</button>
+                    <div>横截面分析</div>
 
+                    <button class="analysis-intersect-surface">开始分析</button>
+                </div>
+
+            </div>
         </div>
+        <!--<div class="resourcesbar-collapse">展开/收缩</div>-->
     </div>
 </script>
 
 <script type="text/html" id="resultsbar">
-    <div class="resultsbar-container">
-        <div> <span class="resultsbar-close">关闭</span> </div>
-        <div class="resultsbar-content">
+    <div class="resultsbar-container container">
+        <div> <span class="resultsbar-close"><!--关闭--></span> <span class="resultsbar-collapse">结果输出区</span> </div>
+        <div class="resultsbar-content"></div>
+        <!--<div class="resultsbar-content">
             <table>
                 <tr>
                     <th>#</th>
@@ -108,13 +113,43 @@
                 </tr>
                 {{/each}}
             </table>
-        </div>
+        </div>-->
 
     </div>
 </script>
 
+<script type="text/html" id="collision-check-table">
+    <div class="collision-check-table-container">
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Coordinate</th>
+                <th>半径1</th>
+                <th>高程1</th>
+                <th>半径2</th>
+                <th>高程2</th>
+                <th>净距</th>
+            </tr>
+            {{each results as value i}}
+
+            <tr>
+                <td>{{i}}</td>
+                <td>[{{value.coordinate[0]}},{{value.coordinate[1]}}]</td>
+                <td>{{value.radius1}}</td>
+                <td>{{value.height1}}</td>
+                <td>{{value.radius2}}</td>
+                <td>{{value.height2}}</td>
+                <td>{{value.heightDiff}}</td>
+                <td>{{value.boolCollision}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+
+</script>
+
 <script type="text/html" id="editor">
-    <div class="editor-container">
+    <div class="editor-container container">
         <div class="header-container">
             <span class="headbar-title-container"></span><span class="editor-close">关闭</span>
         </div>
@@ -140,9 +175,9 @@
 </script>
 
 <script type="text/html" id="olmap">
-    <div class="map-container">
+    <div class="map-container container">
         <div class="map-head">
-            <span class="map-collapse">展开/收缩</span>
+            <span class="map-collapse">OpenLayers地图</span>
             <span class="map-title-text"></span>
         </div>
         <div class="map-stat">

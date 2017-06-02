@@ -10,20 +10,21 @@
 }
 
 .resourcesbar-container {
+    min-width: 200px;
     cursor: default;
     user-select: none;
     position: absolute;
     left: 0;
-    top: 30%;
+    top: 0;
     background-color: white;
 }
 
 .resultsbar-container {
-    font-family: nsimsun;
-    font-size: 9px;
-    top: 10%;
-    left: 20%;
-    min-width: 400px;
+    /*font-family: nsimsun;*/
+    /*font-size: 9px;*/
+    top: 0;
+    left: 210px;
+    min-width: 300px;
     z-index: 200;
     position: absolute;
     background-color: white;
@@ -31,6 +32,8 @@
 
 .resultsbar-content {
     min-height: 300px;
+    max-width: 350px;
+    overflow-x: scroll;
     overflow-y: scroll;
 }
 
@@ -49,11 +52,12 @@
 }
 
 .map-container {
+    left: 840px;
     position: absolute;
-    right: 0px;
-    top: 100px;
+    /* right: 0px; */
+    top: 0;
     background-color: white;
-    height: 220px;
+    /*height: 220px;*/
     width: 500px;
 }
 
@@ -67,4 +71,21 @@
 
 .map {
     height: 80%;
+}
+
+.container {
+    user-select: none;
+    cursor: default;
+    color: rgba(250,250,200,1);
+    background-color: rgba(50,150,200,0.7);
+    border-radius: 0.5em;
+    border: 4px rgba(50,200,150,0.6) solid;
+}
+
+.cesium-viewer-toolbar {
+    opacity: 0;
+}
+
+table, th, td {
+    border: 1px solid black;
 }
