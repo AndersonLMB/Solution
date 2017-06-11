@@ -12,16 +12,16 @@ var STK_Terrain_Provider = new Cesium.CesiumTerrainProvider({
     requestVertexNormals: true
 });
 
-var OSM_WMTS_Provider = new Cesium.createOpenStreetMapImageryProvider({
-    url: "https://a.tile.openstreetmap.org/",
-});
+//var OSM_WMTS_Provider = new Cesium.createOpenStreetMapImageryProvider({
+//    //url: "https://a.tile.openstreetmap.org/",
+//});
 
 var ArcGIS_WMTS_Provider = new Cesium.ArcGisMapServerImageryProvider({
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
 });
 
 var resources = {
-    "OSM_WMTS": OSM_WMTS_Provider,
+    //"OSM_WMTS": OSM_WMTS_Provider,
     "ArcGIS_WMTS": ArcGIS_WMTS_Provider,
     "STK_Terrain": STK_Terrain_Provider,
     "Local_Terrain": terrainProvider,
@@ -32,13 +32,13 @@ var viewer = new Cesium.Viewer("cesiumContainer", {
     animation: false,
     infoBox: false,
     baseLayerPicker: false,
-    terrainProvider: terrainProvider,
-    imageryProvider: OSM_WMTS_Provider,
+    //terrainProvider: terrainProvider,
+    imageryProvider: ArcGIS_WMTS_Provider,
 });
 
 var imageryLayers = viewer.scene.imageryLayers;
 
-imageryLayers.addImageryProvider(ArcGIS_WMTS_Provider);
+//imageryLayers.addImageryProvider(ArcGIS_WMTS_Provider);
 
 
 var loadEntities = function (entitiesFromServer) {
@@ -537,5 +537,4 @@ var changeCesiumExtent = function (extent, cviewer) {
     camera.flyTo({
         destination: Cesium.Rectangle.fromDegrees(extent[0], extent[1], extent[2], extent[3])
     })
-
 }

@@ -24,7 +24,7 @@
     /*font-size: 9px;*/
     top: 0;
     left: 210px;
-    min-width: 300px;
+    min-width: 320px;
     z-index: 200;
     position: absolute;
     background-color: white;
@@ -32,7 +32,7 @@
 
 .resultsbar-content {
     min-height: 300px;
-    max-width: 350px;
+    max-width: 375px;
     overflow-x: scroll;
     overflow-y: scroll;
 }

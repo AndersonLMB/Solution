@@ -166,7 +166,7 @@ jQuery(".WMTSSelector").change(function () {
 //地形服务选择器
 jQuery(".terrainSelector").change(
     function () {
-        viewer.terrainProvider = resources[jQuery(".terrainSelector").val()];
+        //viewer.terrainProvider = resources[jQuery(".terrainSelector").val()];
     });
 
 jQuery(".collision-apply").click(
